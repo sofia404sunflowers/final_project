@@ -1,0 +1,73 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+ {% if user.is_authenticated %}
+
+   <h1> {{ account }} </h1>
+           {% if account != user %}
+
+         {% if user_in_follow_list %}
+     <a class="btn btn-primary" href="{% url 'unfollow' account.id %}" role="button">˗ˏˋ unfollow ´ˎ˗</a>
+
+        {% else %}
+             <a class="btn btn-primary" href="{% url 'follow' account.id %}" role="button">˗ˏˋ follow ´ˎ˗</a>
+        {% endif %}
+    {% endif %}
+
+{% endif %}
+
+
+<div>
+    follows {{ account.u_follows.count }}
+    followers {{ account.u_followers.count }}
+</div>
+
+
+<ul>
+
+{% for post in page_obj %}
+    <li>
+        <div id="div{{ post.id }}" class="d-flex flex-row bd-highlight mb-3">
+            <div class="p-2 bd-highlight"><a href="{% url 'account' post.user %}">{{ post.user_name }}</a></div>
+            <div class="p-2 bd-highlight" id = "post_text{{ post.id}}">{{ post.text }}</div>
+            <div class="p-2 bd-highlight">{{ post.timestamp }}</div>
+
+        </div>
+    </li>
+{% endfor %}
+
+</ul>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+         {% endif %}
+
+      {% for page in page_obj.paginator.page_range %}
+      <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+      {% endfor %}
+
+
+       {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+       {% endif %}
+
+  </ul>
+</nav>
+
+
+
+
+{% endblock %}
+

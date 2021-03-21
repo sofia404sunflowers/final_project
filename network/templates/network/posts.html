@@ -1,0 +1,67 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+                <button id = "b" class="btn btn-link">✍</button>
+
+<div id="post_id"> post_id</div>
+<div id="post_list"> post_id</div>
+<ul>
+
+{% for post in page_obj %}
+    <li>
+        <div id="div{{ post.id }}" class="d-flex flex-row bd-highlight mb-3">
+            <div class="p-2 bd-highlight"><a href="">{{ post.user_name }}</a></div>
+            <div class="p-2 bd-highlight" id = "post_text{{ post.id}}">{{ post.text }}</div>
+            <div class="p-2 bd-highlight">{{ post.timestamp }}</div>
+            <div class="p-2 bd-highlight"> <b>{{ post.likes.count }} 💕</b></div>
+
+                {% if post.user == user.id %}
+                    <div class="p-2 bd-highlight">
+                    <button data-post = "{{ post.id}}" id = "edit_button_{{ post.id}}" class="edit" >✎</button>
+                    <button data-post = "{{ post.id}}" id = "save_button_{{ post.id}}" class="save" >save</button>
+                    </div>
+                {% endif %}
+        </div>
+    </li>
+{% endfor %}
+</ul>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+         {% endif %}
+
+      {% for page in page_obj.paginator.page_range %}
+      <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+      {% endfor %}
+
+
+       {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+       {% endif %}
+
+  </ul>
+</nav>
+
+
+
+{% endblock %}
+
+
+
+
+{% block script %}
+    <script src="{% static 'network/posts.js' %}"></script>
+{% endblock %}
+
